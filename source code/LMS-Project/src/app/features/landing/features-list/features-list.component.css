@@ -1,0 +1,54 @@
+/* تنسيق سيكشن المميزات بالكامل */
+.features-section {
+  padding: 80px 0;
+  background-color: #ffffff;
+}
+
+/* تنسيق الكارت نفسه */
+.feature-card {
+  border-radius: 20px;
+  border: 1px solid #f0f0f0; /* بوردر خفيف جداً */
+  transition: all 0.3s ease-in-out;
+  background: #fff;
+}
+
+/* حركة الكارت لما الماوس ييجي عليه */
+.feature-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 15px 35px rgba(65, 179, 227, 0.15) !important; /* ظل بلون لومينا اللبني */
+  border-color: rgba(65, 179, 227, 0.2);
+}
+
+/* الدائرة اللي شايلة الأيقونة */
+.icon-circle {
+  width: 80px;
+  height: 80px;
+  background-color: rgba(65, 179, 227, 0.08); /* لون لبني شفاف جداً */
+  border-radius: 20px; /* مربعة بحواف ناعمة بتبقى أشيك مع اللوجو */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 25px;
+  transition: all 0.3s ease;
+}
+
+/* تنسيق الأيقونة نفسها */
+.icon-circle i {
+  font-size: 2.2rem;
+  color: #41B3E3; /* لون اللوجو اللبني */
+}
+
+/* لما تقف على الكارت.. الأيقونة والدايرة ألوانهم تتبدل */
+.feature-card:hover .icon-circle {
+  background-color: #41B3E3;
+}
+
+.feature-card:hover .icon-circle i {
+  color: #ffffff;
+}
+
+/* تنسيق العناوين جوه الكروت */
+.card-title {
+  color: #003366; /* الكحلي الغامق */
+  margin-bottom: 15px;
+}

@@ -1,0 +1,181 @@
+<div class="auth-wrapper" dir="ltr">
+    <div class="mesh-gradient"></div>
+
+    <div class="glass-card">
+
+        <div *ngIf="!isRegistered" class="fade-in">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-white mt-3">Create Account</h2>
+                <p class="text-white-50 small">Join Lumina Smart LMS</p>
+            </div>
+
+            <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white-50 small">First Name</label>
+                        <input type="text" formControlName="firstName" class="form-control glass-input"
+                            placeholder="First Name"
+                            [class.is-invalid]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+                        <div class="invalid-feedback"
+                            *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+                            <span *ngIf="registerForm.get('firstName')?.errors?.['required']">First name is
+                                required.</span>
+                            <span *ngIf="registerForm.get('firstName')?.errors?.['minlength']">Must be at
+                                least 2 characters.</span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white-50 small">Last Name</label>
+                        <input type="text" formControlName="lastName" class="form-control glass-input"
+                            placeholder="Last Name"
+                            [class.is-invalid]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+                        <div class="invalid-feedback"
+                            *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+                            <span *ngIf="registerForm.get('lastName')?.errors?.['required']">Last name is
+                                required.</span>
+                            <span *ngIf="registerForm.get('lastName')?.errors?.['minlength']">Must be at
+                                least 2 characters.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white-50 small">Email Address</label>
+                    <input type="email" formControlName="email" class="form-control glass-input"
+                        placeholder="name@example.com"
+                        [class.is-invalid]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                    <div class="invalid-feedback"
+                        *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+                        Please enter a valid email address.
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white-50 small">Password</label>
+                    <input type="password" formControlName="password" class="form-control glass-input"
+                        placeholder="••••••••"
+                        [class.is-invalid]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+
+                    <div class="invalid-feedback" style="font-size: 0.75rem;"
+                        *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+                        <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is
+                            required. </span>
+                        <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Min 8 chars.
+                        </span>
+                        <span *ngIf="registerForm.get('password')?.errors?.['pattern']">Must include numbers, Uppercase,
+                            Lowercase & Special character (&#64;$!%*?#&).</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white-50 small">Confirm Password</label>
+                    <input type="password" formControlName="confirmPassword" class="form-control glass-input"
+                        placeholder="••••••••"
+                        [class.is-invalid]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+
+                    <div class="invalid-feedback" style="font-size: 0.75rem;"
+                        *ngIf="registerForm.get('confirmPassword')?.touched">
+                        <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Please confirm your
+                            password.</span>
+                        <span *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']">Passwords do not
+                            match!</span>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label text-white-50 small">Date of Birth</label>
+                    <div class="input-group">
+                        <span class="input-group-text glass-input-icon"><i class="bi bi-calendar3"></i></span>
+                        <input type="date" formControlName="dob" class="form-control glass-input text-white-50"
+                            [class.is-invalid]="registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched">
+                    </div>
+                    <div class="invalid-feedback"
+                        *ngIf="registerForm.get('dob')?.invalid && registerForm.get('dob')?.touched">
+                        Date of birth is required.
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white-50 small">Department</label>
+                        <div class="input-group">
+                            <span class="input-group-text glass-input-icon"><i class="bi bi-building"></i></span>
+                            <select formControlName="departmentId" class="form-select glass-input text-white-50"
+                                [class.is-invalid]="registerForm.get('departmentId')?.invalid && registerForm.get('departmentId')?.touched">
+                                <option value="" disabled selected>Select Department</option>
+                                <option *ngFor="let dept of departments" [value]="dept.id" class="text-dark">
+                                    {{ dept.title }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="invalid-feedback"
+                            *ngIf="registerForm.get('departmentId')?.invalid && registerForm.get('departmentId')?.touched">
+                            Please select your department.
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label text-white-50 small">Academic Year</label>
+                        <div class="input-group">
+                            <span class="input-group-text glass-input-icon"><i class="bi bi-mortarboard"></i></span>
+                            <select formControlName="academicYear" class="form-select glass-input text-white-50"
+                                [class.is-invalid]="registerForm.get('academicYear')?.invalid && registerForm.get('academicYear')?.touched">
+                                <option value="" disabled selected>Select Year</option>
+                                <option *ngFor="let year of academicYears" [value]="year.value" class="text-dark">
+                                    {{ year.label }}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="invalid-feedback"
+                            *ngIf="registerForm.get('academicYear')?.invalid && registerForm.get('academicYear')?.touched">
+                            Academic year is required.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label text-white-50 small">Profile Picture (Optional)</label>
+                    <div class="input-group">
+                        <span class="input-group-text glass-input-icon"><i class="bi bi-image"></i></span>
+                        <input type="file" (change)="onFileSelected($event)" class="form-control glass-input"
+                            accept="image/*">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-login-grad w-100 py-3 mb-4">
+                    Create Account <i class="bi bi-person-plus ms-2"></i>
+                </button>
+
+                <div class="text-center">
+                    <span class="text-white-50 small">Already have an account?</span>
+                    <a routerLink="/login" class="text-white fw-bold text-decoration-none small ms-2">Sign
+                        In</a>
+                </div>
+            </form>
+        </div>
+
+        <div *ngIf="isRegistered" class="registration-success text-center fade-in py-4">
+            <div class="mb-4">
+                <div class="logo-glow mb-4">
+                    <i class="bi bi-envelope-check text-white" style="font-size: 4.5rem;"></i>
+                </div>
+                <h2 class="fw-bold text-white">Check Your Email</h2>
+                <p class="text-white-50 mt-3 px-2">
+                    We've sent a confirmation link to your inbox.
+                    Please click the link to activate your account.
+                </p>
+                <p class="text-white-50 mt-2">
+                    Didn't receive the email?
+                    <a href="javascript:void(0)" (click)="resendConfirmation()"
+                        class="text-info text-decoration-none fw-bold">
+                        Resend Link
+                    </a>
+                </p>
+            </div>
+            <button routerLink="/login" class="btn btn-login-grad w-100 py-3 mt-2">
+                Back to Login
+            </button>
+        </div>
+
+    </div>
+</div>

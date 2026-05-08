@@ -1,0 +1,133 @@
+/* 1. الخلفية المتحركة (Mesh Gradient) */
+.auth-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh !important;
+  display: flex !important;
+  align-items: center !important; /* رجعناها سنتر عشان الكارد بقى ملموم ويظهر في النص */
+  justify-content: center !important;
+  background: linear-gradient(-45deg, #001529, #002D5B, #001529, #41B3E3);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  overflow: hidden;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 2. تأثير الزجاج (Glassmorphism) مع تقليل الـ Padding وحركة الـ Float */
+.glass-card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 25px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 500px; /* عرض متوسط ومناسب */
+  margin: 0 auto ;
+  padding: 1.5rem 2rem !important; /* تقليل المساحة من فوق وتحت وجوه الكارد */
+  animation: fadeInUp 0.8s ease-out forwards, float 6s ease-in-out infinite 0.8s;
+}
+
+/* 3. تصغير المسافات بين الحقول (مهم جداً للمساحة) */
+.mb-3 {
+    margin-bottom: 0.7rem !important; /* تقليل المسافة بين الحقول */
+}
+
+.mb-4 {
+    margin-bottom: 0.9rem !important;
+}
+
+.form-label {
+    margin-bottom: 0.2rem !important;
+    font-size: 0.85rem;
+}
+
+/* 4. الإدخال الزجاجي المدمج */
+.glass-input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: white !important;
+  border-radius: 10px;
+  padding: 8px 12px !important; /* تصغير ارتفاع حقل الإدخال */
+  font-size: 0.9rem;
+}
+
+.glass-input::placeholder { color: rgba(255, 255, 255, 0.4); }
+
+.input-group-text.glass-input-icon {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.6);
+    padding: 0 10px;
+}
+
+/* 5. زرار الدخول وتوهج اللوجو */
+.btn-login-grad {
+  background: linear-gradient(90deg, #41B3E3, #002D5B);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-login-grad:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(65, 179, 227, 0.3);
+}
+
+.logo-glow {
+  filter: drop-shadow(0 0 15px rgba(65, 179, 227, 0.5));
+  margin-bottom: 0.5rem;
+}
+
+.logo-glow img {
+    width: 55px; /* تصغير اللوجو عشان نوفر مساحة للسكرين */
+}
+
+h2 {
+    font-size: 1.4rem !important;
+    margin-top: 0.2rem !important;
+}
+
+/* حركة العوم والظهور */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); } /* تقليل مسافة العوم لزيادة الثبات */
+  100% { transform: translateY(0px); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* تنسيق التاريخ والملف */
+input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+input[type="file"]::file-selector-button {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 5px;
+    padding: 3px 10px;
+    font-size: 0.8rem;
+}
+
+/* لون أحمر هادي للغلط عشان ميزعجش العين وسط التصميم الأزرق */
+.invalid-feedback {
+    display: block; /* عشان تظهر مع الـ ngIf بتاعنا */
+    color: #ff6b6b; 
+    font-size: 0.8rem;
+    margin-top: 5px;
+    font-weight: 500;
+}
+
+/* تخلي الحقل الغلط يظهر بحدود حمراء بسيطة */
+.glass-input.is-invalid {
+    border: 1px solid rgba(255, 107, 107, 0.5) !important;
+    background: rgba(255, 107, 107, 0.05) !important;
+}

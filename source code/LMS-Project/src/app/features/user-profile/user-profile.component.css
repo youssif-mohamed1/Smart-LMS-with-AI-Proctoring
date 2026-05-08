@@ -1,0 +1,233 @@
+/* منع السكرول العرضي نهائياً وضمان الـ Fit */
+:host {
+  display: block;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.row {
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  width: 100% !important;
+}
+
+/* تنسيق الكارد الأساسي (الخلفية البيضاء النظيفة) */
+.glass-card {
+  background: #ffffff !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid #eeeeee !important;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
+  color: #333 !important;
+  overflow: hidden;
+}
+
+/* حاوية صورة البروفايل */
+.profile-img-container {
+  width: 130px;
+  height: 130px;
+  margin: 0 auto 1.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* جعل الصورة مدورة باحترافية */
+.profile-img-container img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 3px solid #41b3e3;
+  padding: 3px;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* أيقونة الكاميرا (تغيير الصورة) */
+.edit-photo-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 38px;
+  height: 38px;
+  background: #41b3e3 !important;
+  color: white !important;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.edit-photo-btn:hover {
+  background: #002d5b !important;
+  transform: scale(1.1);
+}
+
+/* تنسيق النصوص (الاسم والإيميل) */
+h4.text-white {
+  color: #002d5b !important;
+  font-weight: 700;
+}
+
+.text-white-50 {
+  color: #777 !important;
+}
+
+/* زرار الـ Level Up */
+.btn-levelup {
+  background: linear-gradient(135deg, #41b3e3, #002d5b) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 12px !important;
+  font-weight: 600;
+  padding: 10px !important;
+  transition: all 0.3s ease;
+}
+
+.btn-levelup:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(65, 179, 227, 0.3) !important;
+  color: white !important; /* ضمان بقاء النص أبيض */
+}
+
+/* الـ Badge (السنة الدراسية) */
+.badge.bg-info {
+  background-color: #41b3e3 !important;
+  color: white !important;
+  font-weight: 500;
+  padding: 6px 15px !important;
+}
+
+/* أنظمة الـ Accordion (الأجزاء القابلة للطي) */
+.expand-content {
+  max-height: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.4s ease-out,
+    opacity 0.3s ease;
+  opacity: 0;
+}
+
+.expand-content.show {
+  max-height: 1000px;
+  opacity: 1;
+  margin-top: 10px;
+}
+
+/* ألوان الأزرار التفاعلية (Edit & Security) ومعالجة الـ Hover */
+.btn-outline-info {
+  border: 1px solid #41b3e3 !important;
+  color: #41b3e3 !important;
+  border-radius: 10px !important;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-info:hover,
+.btn-info-active {
+  background: #41b3e3 !important;
+  color: white !important; /* تحويل النص للأبيض لسهولة القراءة */
+  border-radius: 10px !important;
+}
+
+.btn-outline-danger {
+  border: 1px solid #ff4b2b !important;
+  color: #ff4b2b !important;
+  border-radius: 10px !important;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover,
+.btn-danger-active {
+  background: linear-gradient(45deg, #ff4b2b, #ff416c) !important;
+  color: white !important; /* تحويل النص للأبيض لسهولة القراءة */
+  border-radius: 10px !important;
+}
+
+/* ضمان ظهور الأيقونات باللون الأبيض عند الـ Hover */
+.btn:hover span,
+.btn:hover i {
+  color: white !important;
+}
+
+/* تنسيق حقول الإدخال (Inputs) */
+.glass-input {
+  background: #fcfcfc !important;
+  border: 1px solid #e0e0e0 !important;
+  border-radius: 10px !important;
+  color: #333 !important;
+  font-size: 0.9rem;
+}
+
+.glass-input:focus {
+  border-color: #41b3e3 !important;
+  box-shadow: 0 0 0 3px rgba(65, 179, 227, 0.1) !important;
+}
+
+/* زرار حفظ التعديلات */
+.btn-login-grad {
+  background: linear-gradient(135deg, #41b3e3, #002d5b) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+  font-weight: 600;
+}
+
+.btn-danger-grad {
+  background: linear-gradient(45deg, #ff4b2b, #ff416c) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 10px !important;
+}
+
+/* رفع تنبيهات SweetAlert فوق الـ Drawer */
+::ng-deep .swal2-container {
+  z-index: 99999 !important;
+}
+
+/* تنسيق زرار الـ Logout الجديد */
+/* تنسيق جديد Slim لزرار الـ Logout */
+.btn-logout-drawer {
+  background: transparent !important;
+  border: 1px solid #ddd !important; /* border خفيف جداً */
+  color: #888 !important; /* لون نص هادي */
+  border-radius: 30px !important; /* مدور أكتر */
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 8px 20px !important; /* padding صغير */
+  transition: all 0.3s ease;
+  width: auto !important; /* مش واخد العرض كله */
+  margin: 0 auto; /* في النص */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-logout-drawer:hover {
+    background: rgba(255, 75, 43, 0.1) !important; /* خلفية حمراء خفيفة جداً */
+    border-color: #ff4b2b !important;
+    color: #ff4b2b !important; /* لون النص أحمر */
+    transform: translateY(-1px);
+    box-shadow: none !important;
+}
+
+/* السطر ده هو اللي هيمنع الأيقونة إنها تقلب أبيض */
+.btn-logout-drawer:hover i {
+    color: #ff4b2b !important; 
+}
+
+/* حاوية للزرار عشان تظبط مكانه */
+.logout-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}

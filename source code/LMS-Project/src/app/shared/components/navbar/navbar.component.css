@@ -1,0 +1,53 @@
+/* تأثير الخط الأزرق تحت اللينك النشط */
+.nav-link {
+    color: #002D5B !important;
+    position: relative;
+    font-weight: 600;
+}
+
+/* create a centered underline and animate its scale to avoid layout shifts */
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    width: 60%;
+    height: 2px;
+    background-color: #41B3E3;
+    transition: transform 180ms ease, opacity 180ms ease;
+    opacity: 0;
+}
+
+.nav-link.active::after {
+    transform: translateX(-50%) scaleX(1);
+    opacity: 1;
+}
+
+.navbar {
+    /* جعل النافبار شفاف بلمسة زجاجية */
+    background: rgba(255, 255, 255, 0.05) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* تنسيق الروابط (Home, About, Contact) */
+.navbar-nav .nav-link {
+    padding: 0.5rem 1.2rem !important;
+    transition: color 180ms ease;
+}
+
+/* لما تقف بالماوس على اللينك */
+.navbar-nav .nav-link:hover {
+    color: #41B3E3 !important; 
+}
+
+/* اللينك اللي إنت واقف عليه حالياً */
+.navbar-nav .nav-link.active {
+    color: #41B3E3 !important;
+}
+
+
+
+

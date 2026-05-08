@@ -1,0 +1,148 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-info fw-bold mb-0">User Management</h2>
+        <button *ngIf="hasPermission('users:add')" class="btn shadow-sm"
+            [ngClass]="showForm ? 'btn-lumina-outline' : 'btn-lumina-main'"
+            (click)="showForm = !showForm; (showForm ? null : resetForm())">
+            <i class="bi" [ngClass]="showForm ? 'bi-x-lg' : 'bi-plus-lg'"></i>
+            {{ showForm ? 'Close Form' : 'Create New User' }}
+        </button>
+    </div>
+
+    <div class="card shadow-sm mb-4" *ngIf="showForm">
+        <div class="card-header py-3 text-info">
+            <h5 class="mb-0">{{ editingUserId ? 'Edit User' : 'Add New User Account' }}</h5>
+        </div>
+        <div class="card-body">
+            <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">First Name</label>
+                        <input type="text" class="form-control" formControlName="firstName"
+                            [class.is-invalid]="userForm.get('firstName')?.invalid && userForm.get('firstName')?.touched">
+                        <div class="invalid-feedback">First name is required.</div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Last Name</label>
+                        <input type="text" class="form-control" formControlName="lastName"
+                            [class.is-invalid]="userForm.get('lastName')?.invalid && userForm.get('lastName')?.touched">
+                        <div class="invalid-feedback">Last name is required.</div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Email</label>
+                        <input type="email" class="form-control" formControlName="email"
+                            [class.is-invalid]="userForm.get('email')?.invalid && userForm.get('email')?.touched">
+                        <div class="invalid-feedback">Please enter a valid email.</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 mb-3" *ngIf="!editingUserId">
+                        <label class="form-label fw-bold">Password</label>
+                        <input type="password" class="form-control" formControlName="password"
+                            [class.is-invalid]="userForm.get('password')?.invalid && userForm.get('password')?.touched">
+                        <div class="invalid-feedback">
+                            Password must be 8+ characters with uppercase, lowercase, number, and special character.
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Department</label>
+                        <select class="form-select" formControlName="departmentId">
+                            <option [ngValue]="null">None</option>
+                            <option *ngFor="let dept of departments" [value]="dept.id">
+                                {{ dept.title }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label fw-bold">Roles</label>
+                        <select multiple class="form-select" formControlName="roles" style="height: 100px;">
+                            <option *ngFor="let role of roles" [value]="role.name">{{ role.name }}</option>
+                        </select>
+                        <small class="text-muted">Optional: Hold Ctrl to select multiple</small>
+                    </div>
+
+                    <div class="col-md-4 mb-3" *ngIf="editingUserId">
+                        <label class="form-label fw-bold ">Academic Year</label>
+                        <select class="form-select " formControlName="academicYear">
+                            <option *ngFor="let year of academicYears" [value]="year.value">
+                                {{ year.label }}
+                            </option>
+                        </select>
+                        <small class="text-muted">Select 'None' for non-students.</small>
+                    </div>
+                </div>
+
+                <div class="text-end mt-3 border-top pt-3">
+                    <button type="button" class="btn btn-secondary me-2" (click)="resetForm()">Cancel</button>
+                    <button type="submit" class="btn btn-save-action px-4" [disabled]="userForm.invalid">
+                        {{ editingUserId ? 'Update User' : 'Create User' }}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4" *ngIf="!isLoading">
+        <div class="table-responsive table-container">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light sticky-top">
+                    <tr>
+                        <th style="width: 25%;">User Info</th>
+                        <th class="text-center" style="width: 30%;">Role</th>
+                        <th class="text-center" style="width: 30%;">Status</th>
+                        <th *ngIf="hasPermission('users:update') || hasPermission('users:delete')" class="text-center"
+                            style="width: 15%;">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let user of users">
+                        <td>
+                            <div class="fw-bold">{{ user.firstName }} {{ user.lastName }}</div>
+                            <small class="text-muted">{{ user.email }}</small>
+                        </td>
+                        <td class="text-center">
+                            <span *ngFor="let role of user.roles" class="badge bg-light text-dark me-1 border">
+                                {{ role }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span class="status-badge"
+                                [ngClass]="user.isDisabled ? 'status-disabled' : 'status-active' ">
+                                {{ user.isDisabled ? 'Disabled' : 'Active' }}
+                            </span>
+                        </td>
+                        <td *ngIf="hasPermission('users:update') || hasPermission('users:delete')" class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <button *ngIf="hasPermission('users:update')" class="btn-edit-action"
+                                    (click)="editUser(user)">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </button>
+                                <button *ngIf="hasPermission('users:delete')" class="btn-status-action "
+                                    [ngClass]="user.isDisabled ? 'btn-to-enable' : 'btn-to-disable'"
+                                    (click)="toggleStatus(user.id)">
+                                    {{ user.isDisabled ? 'Enable' : 'Disable' }}
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="users.length === 0">
+                        <td colspan="4" class="text-center py-4 text-muted">No users found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Fetching users from server...</p>
+    </div>
+</div>

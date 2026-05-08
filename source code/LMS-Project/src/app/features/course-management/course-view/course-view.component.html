@@ -1,0 +1,197 @@
+<!-- Course View — Cycle 1: Card Grid Hub -->
+<div class="course-view-container">
+
+  <!-- ── Page Header ── -->
+  <div class="page-header d-flex flex-column flex-md-row align-items-md-end justify-content-between gap-3 mb-4">
+    <div class="d-flex flex-column gap-3 flex-grow-1">
+      <h2 class="text-info fw-bold mb-0">Courses</h2>
+      <div class="d-flex flex-column flex-sm-row gap-3" style="max-width: 600px;">
+        <!-- Search Bar -->
+        <div class="position-relative flex-grow-1">
+          <i class="bi bi-search position-absolute top-50 translate-middle-y text-muted" style="left: 14px;"></i>
+          <input type="text" class="form-control ps-5" placeholder="Search courses by title or ID..." [(ngModel)]="searchTerm" (input)="applyFilters()">
+        </div>
+        <!-- Filter Dropdown -->
+        <div class="position-relative">
+          <select class="form-select" [(ngModel)]="selectedSemester" (change)="applyFilters()">
+            <option value="">Filter by Semester (all)</option>
+            <option value="Fall">Fall</option>
+            <option value="Spring">Spring</option>
+            <option value="Summer">Summer</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button *ngIf="canAddCourse" class="btn-create flex-shrink-0" (click)="navigateToCreate()">
+      <i class="bi bi-plus-lg"></i>
+      Create New Course
+    </button>
+  </div>
+
+  <!-- ── Loading State ── -->
+  <div *ngIf="isLoading" class="state-container">
+    <div class="spinner-border text-info" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="state-message mt-3">Loading courses...</p>
+  </div>
+
+  <!-- ── Error State ── -->
+  <div *ngIf="!isLoading && loadFailed" class="state-container">
+    <i class="bi bi-exclamation-triangle-fill text-danger fs-1"></i>
+    <p class="state-message mt-3">Could not load courses.</p>
+    <button class="btn-retry mt-3" (click)="loadCourses()">
+      <i class="bi bi-arrow-clockwise me-2"></i>Retry
+    </button>
+  </div>
+
+  <!-- ── Empty State ── -->
+  <div *ngIf="!isLoading && !loadFailed && filteredCourses.length === 0" class="state-container">
+    <i class="bi bi-journal-x fs-1" style="color: #41B3E3;"></i>
+    <p class="state-message mt-3">No courses found matching your criteria.</p>
+  </div>
+
+  <!-- ── Course Card Grid ── -->
+  <div *ngIf="!isLoading && !loadFailed && filteredCourses.length > 0" class="course-grid">
+
+    <article *ngFor="let course of filteredCourses" 
+             class="course-card" 
+             (click)="navigateToContent(course)"
+             style="cursor: pointer;">
+
+      <!-- ── Image / Placeholder ── -->
+      <div class="course-img-wrapper">
+        <img *ngIf="course.ImageUrl" [src]="course.ImageUrl" [alt]="course.Title" class="course-img"
+          (error)="onImageError($event)" />
+        <div class="img-placeholder" [style.display]="course.ImageUrl ? 'none' : 'flex'">
+          <i class="bi bi-book"></i>
+        </div>
+        <!-- Gradient overlay -->
+        <div class="img-overlay"></div>
+
+        <!-- Status Badge -->
+        <div class="status-badge-wrapper">
+          <!-- Clickable for Course:update -->
+          <button *ngIf="canUpdateCourse" class="status-badge"
+            [class.badge-published]="course.IsPublished" [class.badge-draft]="!course.IsPublished"
+            (click)="toggleStatus(course); $event.stopPropagation()" [title]="course.IsPublished ? 'Click to set as Draft' : 'Click to Publish'">
+            <span *ngIf="course.IsPublished" class="pulse-dot"></span>
+            {{ course.IsPublished ? 'Published' : 'Draft' }}
+          </button>
+          <!-- Read-only for others -->
+          <span *ngIf="!canUpdateCourse" class="status-badge"
+            [class.badge-published]="course.IsPublished" [class.badge-draft]="!course.IsPublished">
+            <span *ngIf="course.IsPublished" class="pulse-dot"></span>
+            {{ course.IsPublished ? 'Published' : 'Draft' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- ── Card Body ── -->
+      <div class="card-body-content">
+        <h4 class="course-title">{{ course.Title }}</h4>
+
+        <!-- Meta chips: Semester + Credits -->
+        <div class="meta-row">
+          <span class="meta-chip" [class.chip-published]="course.IsPublished" [class.chip-draft]="!course.IsPublished">
+           <i class="bi bi-calendar-event me-1"></i> {{ course.semster }}
+          </span>
+          <span class="meta-chip chip-neutral">
+            <i class="bi bi-clock me-1"></i>{{ course.Credit_Hour }} Credits
+          </span>
+        </div>
+
+        <!-- Description -->
+        <p class="course-description">{{ course.Description }}</p>
+      </div>
+
+      <!-- ── Card Footer: Action Icons ── -->
+      <div class="card-footer-actions">
+        <div class="action-icons">
+          <!-- Edit -->
+          <button *ngIf="canUpdateCourse" class="icon-btn icon-btn-primary" title="Edit Course"
+            (click)="editCourse(course); $event.stopPropagation()">
+            <i class="bi bi-pencil-square"></i>
+          </button>
+
+          <!-- Enrollment -->
+          <button *ngIf="canReadCourse"
+            class="icon-btn icon-btn-primary" title="Manage Enrollment"
+            (click)="openEnrollmentModal(course); $event.stopPropagation()"
+            id="btn-open-enrollment-{{course.Id}}">
+            <i class="bi bi-person-plus"></i>
+          </button>
+
+          <!-- Delete -->
+          <button *ngIf="canDeleteCourse" class="icon-btn icon-btn-danger" title="Delete Course"
+            (click)="removeCourse(course.Id); $event.stopPropagation()">
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>
+
+        <!-- Assessments Button -->
+        <button *ngIf="canReadCourse" class="btn-assessments" title="View Grading Schema"
+          (click)="openAssessmentModal(course); $event.stopPropagation()" id="btn-open-assessment-{{course.Id}}">
+          <i class="bi bi-bar-chart-fill me-1"></i>Grading 
+        </button>
+      </div>
+
+    </article>
+
+  </div>
+
+  <!-- ── Bootstrap Modal Host (T012) ── -->
+  <div class="modal fade" id="courseModal" tabindex="-1" aria-labelledby="courseModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-3 overflow-hidden shadow-lg">
+        <app-course-add-edit
+          [courseData]="selectedCourse"
+          (courseCreated)="onCourseCreated($event)"
+          (courseUpdated)="onCourseUpdated($event)"
+          (modalDismissed)="closeModal()">
+        </app-course-add-edit>
+      </div>
+    </div>
+  </div>
+  <!-- ── Assessment Modal Host ── -->
+  <div class="modal fade" id="assessmentModal" tabindex="-1"
+       aria-labelledby="assessmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-3 overflow-hidden shadow-lg">
+
+        <!-- Modal Header -->
+        <div class="modal-header assessment-modal-header">
+          <div>
+            <h5 class="modal-title mb-0" id="assessmentModalLabel">
+              <i class="bi bi-bar-chart-fill me-2"></i>
+              Manage Grading Schema
+              <span *ngIf="selectedCourse" class="text-white-50 fw-normal"> — {{ selectedCourse.Title }}</span>
+            </h5>
+            <small class="text-white-50 mt-1 d-block">Configure weights and evaluation criteria for this course.</small>
+          </div>
+          <button type="button" class="btn-close btn-close-white"
+                  data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="modal-body p-4">
+          <app-course-assessment
+            [courseId]="selectedCourse?.Id ?? 0"
+            [courseName]="selectedCourse?.Title ?? ''">
+          </app-course-assessment>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <!-- ── Enrollment Modal Host ── -->
+  <div class="modal fade" id="enrollmentModal" tabindex="-1"
+       aria-labelledby="enrollmentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-3 overflow-hidden shadow-lg">
+        <app-course-enrollment></app-course-enrollment>
+      </div>
+    </div>
+  </div>
+
+</div>

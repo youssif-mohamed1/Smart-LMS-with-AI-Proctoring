@@ -1,0 +1,183 @@
+/* ─── Lumina Design Tokens ─────────────────────────────────────────────────── */
+:root {
+  --lumina-blue: #002d5b;
+  --lumina-info: #41b3e3;
+}
+
+/* ─── Scrollable Table Container ───────────────────────────────────────────── */
+.table-container {
+  max-height: 565px;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* ─── Sticky Table Header ───────────────────────────────────────────────────── */
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: white !important;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ─── Lumina Scrollbar ──────────────────────────────────────────────────────── */
+.table-container::-webkit-scrollbar {
+  width: 6px;
+}
+.table-container::-webkit-scrollbar-thumb {
+  background: #41b3e3;
+  border-radius: 10px;
+}
+
+/* ─── Card ──────────────────────────────────────────────────────────────────── */
+.card {
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* ─── Card Header (Dark Navy) ───────────────────────────────────────────────── */
+.card-header {
+  background: linear-gradient(90deg, #001a33 0%, #002d5b 100%) !important;
+  border-bottom: 1px solid rgba(65, 179, 227, 0.3) !important;
+  padding: 15px 20px !important;
+}
+
+.card-header h5 {
+  letter-spacing: 0.5px;
+  margin-bottom: 0;
+}
+
+/* ─── Table Header (Dark Navy + Cyan Text) ──────────────────────────────────── */
+.table thead th {
+  background-color: #001a33 !important;
+  color: #41b3e3 !important;
+  font-weight: 600 !important;
+  text-transform: uppercase;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  padding: 15px 10px;
+  border-bottom: 2px solid #41b3e3 !important;
+  vertical-align: middle;
+}
+
+/* ─── Table Body Rows ───────────────────────────────────────────────────────── */
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(65, 179, 227, 0.05) !important;
+}
+
+.table tbody td {
+  padding: 12px 10px;
+  color: #333;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #eee !important;
+  vertical-align: middle;
+}
+
+/* ─── Main Action Button (Create New Department) ────────────────────────────── */
+.btn-lumina-main {
+  background: linear-gradient(135deg, #41b3e3, #002d5b) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 10px 20px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 4px 12px rgba(65, 179, 227, 0.2) !important;
+}
+
+.btn-lumina-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(65, 179, 227, 0.3) !important;
+  filter: brightness(1.1);
+}
+
+/* ─── Outline Button (Discard / Close) ──────────────────────────────────────── */
+.btn-lumina-outline {
+  background: transparent !important;
+  color: #002d5b !important;
+  border: 1.5px solid #002d5b !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-lumina-outline:hover {
+  background: #002d5b !important;
+  color: white !important;
+}
+
+/* ─── Save Button (inside form) ─────────────────────────────────────────────── */
+.btn-save-action {
+  background-color: #41b3e3 !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 8px 25px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-save-action:disabled {
+  background-color: #ccc !important;
+  cursor: not-allowed;
+}
+
+/* ─── Edit Button ───────────────────────────────────────────────────────────── */
+.btn-edit-action {
+  color: #41b3e3 !important;
+  background-color: rgba(65, 179, 227, 0.08) !important;
+  border: 1px solid #41b3e3 !important;
+  border-radius: 6px !important;
+  padding: 5px 15px !important;
+  font-size: 0.82rem !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn-edit-action:hover {
+  background-color: #41b3e3 !important;
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(65, 179, 227, 0.3);
+}
+
+.btn-edit-action i {
+  margin-right: 4px;
+  font-size: 0.9rem;
+}
+
+/* ─── Base Action Button (shared by Remove) ─────────────────────────────────── */
+.btn-status-action {
+  padding: 4px 12px !important;
+  font-size: 0.82rem !important;
+  font-weight: 500 !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+  min-width: 85px;
+  border: 1px solid transparent !important;
+  background-color: transparent !important;
+}
+
+/* ─── Remove Button (Muted Red) ─────────────────────────────────────────────── */
+.btn-to-disable {
+  color: #e63946 !important;
+  border-color: rgba(230, 57, 70, 0.2) !important;
+  background-color: rgba(230, 57, 70, 0.03) !important;
+}
+
+.btn-to-disable:hover {
+  background-color: #e63946 !important;
+  color: white !important;
+  box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
+}
+
+/* ─── Form Control Focus ─────────────────────────────────────────────────────── */
+.form-control:focus {
+  border-color: #41b3e3 !important;
+  box-shadow: 0 0 0 0.25rem rgba(65, 179, 227, 0.2) !important;
+}

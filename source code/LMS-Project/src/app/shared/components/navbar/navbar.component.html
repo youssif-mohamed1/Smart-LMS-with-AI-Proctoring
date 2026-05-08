@@ -1,0 +1,34 @@
+<nav class="navbar navbar-expand-lg sticky-top bg-white shadow-sm">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="#">
+            <img src="assets/logo.png" alt="Lumina Logo" width="75" height="60" class="me-2">
+            <span class="fw-bold text-lms-dark ms-3" style="letter-spacing: 1px;">
+                LU<span class="text-lms-main">MINA</span>
+            </span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto align-items-center">
+                <li class="nav-item">
+                    <a class="nav-link fw-medium px-3" href="#" (click)="navigateTo('home', $event)"
+                        [class.active]="isActive('home')">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium px-3" href="#" (click)="navigateTo('about', $event)"
+                        [class.active]="isActive('about')">About AI Proctoring</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link fw-medium px-3" href="#" (click)="navigateTo('contact', $event)"
+                        [class.active]="isActive('contact')">Contact</a>
+                </li>
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-primary px-4 shadow-sm" routerLink="/login">Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

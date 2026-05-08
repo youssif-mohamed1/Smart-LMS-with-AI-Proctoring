@@ -1,0 +1,150 @@
+<div class="container mt-4">
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!--  Page Header                                                           -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-info fw-bold mb-0">
+      Department Management
+    </h2>
+
+    <!-- Create New Department — visible only with Department:add permission (US2) -->
+    <button *ngIf="hasPermission('Department:add')" class="btn btn-lumina-main" (click)="openCreateForm()">
+      <i class="bi bi-plus-lg me-2"></i> Create New Department
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!--  Collapsible Add / Edit Form Card (US2 + US3)                         -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div *ngIf="showForm" class="card shadow-sm mb-4">
+
+    <!-- Card Header — dynamic title -->
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="text-info mb-0">
+        <i class="bi bi-pencil-square me-2"></i>
+        {{ editingDeptId ? 'Edit Department' : 'Add Department' }}
+      </h5>
+      <button class="btn btn-lumina-outline btn-sm" (click)="closeForm()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Card Body — Reactive Form -->
+    <div class="card-body p-4">
+      <form [formGroup]="deptForm" (ngSubmit)="saveDept()">
+        <div class="row g-3 align-items-end">
+
+          <!-- Department Title -->
+          <div class="col-md-5">
+            <label for="deptTitle" class="form-label fw-bold text-dark">
+              Department Title <span class="text-danger">*</span>
+            </label>
+            <input id="deptTitle" type="text" formControlName="title" class="form-control" [class.is-invalid]="
+                deptForm.get('title')?.invalid &&
+                deptForm.get('title')?.touched
+              " placeholder="e.g. Computer Science" />
+            <div class="invalid-feedback">
+              Department title is required.
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Form Actions -->
+        <div class="d-flex justify-content-end gap-2 pt-4 mt-3 border-top">
+          <button type="button" class="btn btn-lumina-outline" (click)="closeForm()">
+            <i class="bi bi-x-circle me-1"></i> Discard
+          </button>
+          <button type="submit" class="btn btn-save-action" [disabled]="deptForm.invalid">
+            <i class="bi bi-check-lg me-1"></i> Save Department
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!--  Loading Spinner (US1)                                                 -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div *ngIf="isLoading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="text-muted mt-3">Loading departments...</p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!--  Error / Retry State (US1 — FR-014)                                   -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div *ngIf="!isLoading && loadFailed" class="text-center my-5">
+    <i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 3rem;"></i>
+    <p class="text-muted mt-3 mb-3">Failed to load departments. Please check your connection.</p>
+    <button class="btn btn-lumina-main" (click)="loadDepartments()">
+      <i class="bi bi-arrow-clockwise me-2"></i> Retry
+    </button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <!--  Department Data Table (US1 — FR-001)                                 -->
+  <!-- ═══════════════════════════════════════════════════════════════════════ -->
+  <div *ngIf="!isLoading && !loadFailed" class="card shadow-sm mb-4">
+
+    <!-- Only show Actions column header when at least one action button is renderable -->
+    <div class="table-container">
+      <table class="table table-hover align-middle mb-0">
+
+        <!-- Table Head -->
+        <thead class="sticky-top">
+          <tr>
+            <th style="width: 80px;">#</th>
+            <th>Department Title</th>
+            <th *ngIf="hasPermission('Department:update') || hasPermission('Department:delete')" class="text-center"
+              style="width: 210px;">
+              Actions
+            </th>
+          </tr>
+        </thead>
+
+        <!-- Table Body -->
+        <tbody>
+
+          <!-- Data rows -->
+          <tr *ngFor="let dept of departments">
+            <td class="fw-bold text-muted">{{ dept.id }}</td>
+            <td>{{ dept.title }}</td>
+
+            <!-- Actions Cell — permission-gated per action -->
+            <td *ngIf="hasPermission('Department:update') || hasPermission('Department:delete')" class="text-center">
+              <div class="d-flex justify-content-center gap-2">
+                <!-- Edit Button (US3) -->
+                <button *ngIf="hasPermission('Department:update')" class="btn btn-edit-action" (click)="editDept(dept)"
+                  title="Edit Department">
+                  <i class="bi bi-pencil-square"></i> Edit
+                </button>
+
+                <!-- Remove Button (US4) -->
+                <button *ngIf="hasPermission('Department:delete')" class="btn btn-status-action btn-to-disable"
+                  (click)="removeDept(dept.id)" title="Remove Department">
+                  Remove
+                </button>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Empty state — no records -->
+          <tr *ngIf="departments.length === 0">
+            <td [attr.colspan]="
+                hasPermission('Department:update') || hasPermission('Department:delete') ? 3 : 2
+              " class="text-center text-muted py-5">
+              <i class="bi bi-inbox" style="font-size: 2rem; display: block; margin-bottom: 8px;"></i>
+              No departments found.
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

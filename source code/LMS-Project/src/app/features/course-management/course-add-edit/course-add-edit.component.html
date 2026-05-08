@@ -1,0 +1,163 @@
+<!-- Course Add / Edit Modal — stitch-designs/course-add-edit/code.html reference -->
+<div class="modal-header">
+  <h5 class="modal-title mb-0" id="courseModalLabel">
+    {{ isEditMode ? 'Edit Course' : 'Create New Course' }}
+  </h5>
+  <button type="button" class="btn-close-modal" (click)="onCancel()" aria-label="Close">
+    <i class="bi bi-x-lg"></i>
+  </button>
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <div class="modal-body">
+
+    <!-- ── Two-column grid ── -->
+    <div class="row g-3">
+
+      <!-- Course Title -->
+      <div class="col-md-6">
+        <label class="form-label-lms" for="courseTitle">Course Title</label>
+        <input
+          id="courseTitle"
+          type="text"
+          class="form-control lms-input"
+          [class.is-invalid]="form.get('title')?.invalid && form.get('title')?.touched"
+          formControlName="title"
+          placeholder="e.g. Advanced Quantum Mechanics">
+        <div class="invalid-feedback" *ngIf="form.get('title')?.invalid && form.get('title')?.touched">
+          <span *ngIf="form.get('title')?.errors?.['required']">This field is required.</span>
+          <span *ngIf="form.get('title')?.errors?.['minlength']">Title must be at least 5 characters long.</span>
+        </div>
+      </div>
+
+      <!-- Semester -->
+      <div class="col-md-6">
+        <label class="form-label-lms" for="courseSemester">Semester</label>
+        <select id="courseSemester" class="form-select lms-input" [class.is-invalid]="form.get('semster')?.invalid && form.get('semster')?.touched" formControlName="semster">
+          <option [ngValue]="null" disabled>Select Semester</option>
+          <option [ngValue]="1">Fall</option>
+          <option [ngValue]="2">Spring</option>
+          <option [ngValue]="3">Summer</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="form.get('semster')?.invalid && form.get('semster')?.touched">This field is required.</div>
+      </div>
+
+      <!-- Academic Level -->
+      <div class="col-md-6">
+        <label class="form-label-lms" for="courseLevel">Academic Level</label>
+        <select id="courseLevel" class="form-select lms-input" [class.is-invalid]="form.get('academicLevel')?.invalid && form.get('academicLevel')?.touched" formControlName="academicLevel">
+          <option [ngValue]="null" disabled>Select Level</option>
+          <option [ngValue]="1">Level 1</option>
+          <option [ngValue]="2">Level 2</option>
+          <option [ngValue]="3">Level 3</option>
+          <option [ngValue]="4">Level 4</option>
+          <option [ngValue]="5">Level 5</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="form.get('academicLevel')?.invalid && form.get('academicLevel')?.touched">This field is required.</div>
+      </div>
+
+      <!-- Department -->
+      <div class="col-md-6" *ngIf="!isEditMode">
+        <label class="form-label-lms" for="courseDept">Department</label>
+        <select id="courseDept" class="form-select lms-input" [class.is-invalid]="form.get('departmentId')?.invalid && form.get('departmentId')?.touched" formControlName="departmentId">
+          <option [ngValue]="null" disabled>Select Department</option>
+          <option *ngFor="let dept of departments" [ngValue]="dept.id">{{ dept.title }}</option>
+        </select>
+        <div class="invalid-feedback" *ngIf="form.get('departmentId')?.invalid && form.get('departmentId')?.touched">This field is required.</div>
+        <small *ngIf="isEditMode" class="text-muted">Department cannot be changed after creation.</small>
+      </div>
+
+      <!-- Credit Hours -->
+      <div class="col-md-6">
+        <label class="form-label-lms" for="courseCredits">Credit Hours</label>
+        <input
+          id="courseCredits"
+          type="number"
+          class="form-control lms-input"
+          [class.is-invalid]="form.get('credit_Hour')?.invalid && form.get('credit_Hour')?.touched"
+          formControlName="credit_Hour"
+          min="1" max="10"
+          placeholder="e.g. 3">
+        <div class="invalid-feedback" *ngIf="form.get('credit_Hour')?.invalid && form.get('credit_Hour')?.touched">
+          <span *ngIf="form.get('credit_Hour')?.errors?.['required']">This field is required.</span>
+          <span *ngIf="form.get('credit_Hour')?.errors?.['min']">Credit hours must be at least 1.</span>
+          <span *ngIf="form.get('credit_Hour')?.errors?.['max']">Credit hours cannot exceed 10.</span>
+        </div>
+      </div>
+
+    </div><!-- /row -->
+
+    <!-- ── Description (full width) ── -->
+    <div class="mt-3">
+      <label class="form-label-lms" for="courseDesc">Description</label>
+      <textarea
+        id="courseDesc"
+        class="form-control lms-input"
+        [class.is-invalid]="form.get('description')?.invalid && form.get('description')?.touched"
+        formControlName="description"
+        rows="3"
+        placeholder="Provide a brief overview of the course content..."></textarea>
+      <div class="invalid-feedback" *ngIf="form.get('description')?.invalid && form.get('description')?.touched">This field is required.</div>
+    </div>
+
+    <!-- ── Learning Outcomes (full width) ── -->
+    <div class="mt-3">
+      <label class="form-label-lms" for="courseOutcomes">Learning Outcomes</label>
+      <textarea
+        id="courseOutcomes"
+        class="form-control lms-input"
+        [class.is-invalid]="form.get('learningOutcomes')?.invalid && form.get('learningOutcomes')?.touched"
+        formControlName="learningOutcomes"
+        rows="3"
+        placeholder="What will students achieve by the end of this course?"></textarea>
+      <div class="invalid-feedback" *ngIf="form.get('learningOutcomes')?.invalid && form.get('learningOutcomes')?.touched">This field is required.</div>
+    </div>
+
+    <!-- ── Thumbnail Upload (full width) ── -->
+    <div class="mt-3">
+      <label class="form-label-lms">Course Thumbnail</label>
+      <div class="thumbnail-upload-area">
+
+        <!-- Preview box -->
+        <div class="thumbnail-preview-box">
+          <img *ngIf="imagePreviewUrl" [src]="imagePreviewUrl" alt="Course thumbnail preview" class="thumbnail-img">
+          <div *ngIf="!imagePreviewUrl" class="thumbnail-placeholder">
+            <i class="bi bi-image fs-2 text-muted"></i>
+          </div>
+          <!-- Hover overlay to clear -->
+          <div *ngIf="imagePreviewUrl" class="thumbnail-clear-overlay" (click)="clearImage()">
+            <i class="bi bi-trash text-white"></i>
+          </div>
+        </div>
+
+        <!-- Upload controls -->
+        <div class="thumbnail-controls">
+          <button type="button" class="btn-upload" (click)="fileInput.click()">
+            <i class="bi bi-upload me-2"></i>Upload Image
+          </button>
+          <p class="upload-hint">Recommended: 800×450px · Max 5 MB · JPEG, PNG, WebP</p>
+          <p *ngIf="selectedFile" class="upload-filename">
+            <i class="bi bi-check-circle-fill text-success me-1"></i>{{ selectedFile.name }}
+          </p>
+        </div>
+
+        <!-- Hidden file input -->
+        <input #fileInput type="file" accept="image/jpeg,image/png,image/webp" class="d-none" (change)="onFileSelected($event)">
+
+      </div>
+    </div>
+
+  </div><!-- /modal-body -->
+
+  <!-- ── Modal Footer ── -->
+  <div class="modal-footer-lms">
+    <button type="button" class="btn-cancel-modal" (click)="onCancel()" [disabled]="isSaving">
+      Cancel
+    </button>
+    <button type="submit" class="btn-save-modal" [disabled]="isSaving">
+      <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      {{ isSaving ? 'Saving...' : (isEditMode ? 'Update Course' : 'Save Course') }}
+    </button>
+  </div>
+
+</form>

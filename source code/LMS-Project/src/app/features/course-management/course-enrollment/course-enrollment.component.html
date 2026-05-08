@@ -1,0 +1,143 @@
+<!-- Course Enrollment Modal Body — stitch-designs/course-enrollment/code.html reference -->
+
+<!-- Modal Header -->
+<div class="modal-header enrollment-header">
+  <div class="d-flex align-items-center gap-2">
+    <i class="bi bi-person-lines-fill enrollment-header-icon"></i>
+    <div>
+      <h5 class="modal-title enrollment-title">Manage Course Instructors</h5>
+      <p class="enrollment-subtitle mb-0">{{ courseName }}</p>
+    </div>
+  </div>
+  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<!-- Modal Body -->
+<div class="modal-body p-4">
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border" style="color: #41B3E3;" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="mt-3 text-muted small">Loading enrollment data...</p>
+  </div>
+
+  <!-- Load Error State -->
+  <div *ngIf="loadError && !isLoading" class="alert alert-danger alert-sm d-flex align-items-center gap-2" role="alert">
+    <i class="bi bi-exclamation-circle-fill"></i>
+    {{ loadError }}
+  </div>
+
+  <!-- Content: visible only after successful load -->
+  <ng-container *ngIf="!isLoading && !loadError">
+
+    <!-- Enroll Section (permission-gated) -->
+    <div *ngIf="canEnroll" class="enroll-form-card mb-4">
+      <p class="enroll-form-label mb-2">Select Instructor to Assign</p>
+      <div class="d-flex flex-column flex-md-row gap-2 align-items-md-end">
+        <div class="flex-grow-1">
+          <select class="form-select form-select-sm enrollment-select"
+                  [(ngModel)]="selectedUserId"
+                  [disabled]="availableInstructors.length === 0"
+                  aria-label="Select instructor">
+            <option [ngValue]="null" disabled selected>Choose from eligible faculty members...</option>
+            <option *ngFor="let u of availableInstructors" [ngValue]="u.id">
+              {{ u.firstName }} {{ u.lastName }}
+            </option>
+          </select>
+          <!-- Empty dropdown message -->
+          <p *ngIf="availableInstructors.length === 0" class="text-muted small mt-1 mb-0">
+            <i class="bi bi-info-circle me-1"></i>All available instructors are already enrolled.
+          </p>
+        </div>
+        <div>
+          <button class="btn btn-lumina-main btn-sm px-4"
+                  [disabled]="!selectedUserId || availableInstructors.length === 0"
+                  (click)="onEnroll()"
+                  aria-label="Enroll selected instructor">
+            <i class="bi bi-person-plus-fill me-1"></i> Enroll Instructor
+          </button>
+        </div>
+      </div>
+      <!-- Enroll error -->
+      <div *ngIf="enrollError" class="alert alert-danger alert-sm mt-2 mb-0 py-2" role="alert">
+        <i class="bi bi-exclamation-circle-fill me-1"></i>{{ enrollError }}
+      </div>
+    </div>
+
+    <!-- Enrolled Table -->
+    <div class="table-container">
+      <table class="table table-hover mb-0">
+        <thead>
+          <tr>
+            <th>Instructor Name</th>
+            <th>Email</th>
+            <th class="text-center" *ngIf="canUnenroll">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Empty State Row -->
+          <tr *ngIf="enrolledUsers.length === 0">
+            <td [colSpan]="canUnenroll ? 3 : 2" class="text-center py-5 empty-state">
+              <i class="bi bi-person-x fs-2 d-block mb-2"></i>
+              No instructors enrolled in this course yet.
+            </td>
+          </tr>
+
+          <!-- Instructor Rows -->
+          <tr *ngFor="let user of enrolledUsers"
+              [class.confirm-row]="confirmingUnenrollId === user.id">
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="avatar-initials">{{ getInitials(user) }}</div>
+                <span class="fw-semibold instructor-name">{{ user.firstName }} {{ user.lastName }}</span>
+              </div>
+            </td>
+            <td class="instructor-email">{{ user.email }}</td>
+            <td class="text-center" *ngIf="canUnenroll">
+              <!-- Normal: Delete icon -->
+              <button *ngIf="confirmingUnenrollId !== user.id"
+                      class="btn btn-link btn-unenroll p-1"
+                      (click)="requestUnenroll(user.id)"
+                      [attr.aria-label]="'Unenroll ' + user.firstName + ' ' + user.lastName"
+                      title="Unenroll">
+                <i class="bi bi-person-dash-fill"></i>
+              </button>
+
+              <!-- Inline Confirmation -->
+              <div *ngIf="confirmingUnenrollId === user.id" class="inline-confirm d-flex align-items-center justify-content-center gap-2">
+                <span class="text-muted small me-1">Remove?</span>
+                <button class="btn btn-danger btn-sm py-0 px-2"
+                        (click)="confirmUnenroll()"
+                        aria-label="Confirm unenroll">
+                  Confirm
+                </button>
+                <button class="btn btn-outline-secondary btn-sm py-0 px-2"
+                        (click)="cancelUnenroll()"
+                        aria-label="Cancel unenroll">
+                  Cancel
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Unenroll Error -->
+    <div *ngIf="unenrollError" class="alert alert-danger alert-sm mt-2 py-2" role="alert">
+      <i class="bi bi-exclamation-circle-fill me-1"></i>{{ unenrollError }}
+    </div>
+
+  </ng-container>
+</div>
+
+<!-- Modal Footer -->
+<div class="modal-footer enrollment-footer">
+  <span class="text-muted small me-auto">
+    <i class="bi bi-people-fill me-1" style="color: #41B3E3;"></i>
+    {{ enrolledUsers.length }} instructor{{ enrolledUsers.length === 1 ? '' : 's' }} enrolled
+  </span>
+  <button type="button" class="btn btn-lumina-outline btn-sm" data-bs-dismiss="modal">Close</button>
+</div>

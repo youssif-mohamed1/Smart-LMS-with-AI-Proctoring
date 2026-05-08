@@ -1,0 +1,136 @@
+/* You can add global styles to this file, and also import other style files */
+
+/* src/styles.css */
+
+:root {
+  /* درجة الأزرق السماوي من اللوجو */
+  --lms-primary: #41B3E3;      /* الدرجة الفاتحة والزاهية اللي في اللوجو */
+  --lms-dark: #003366;         /* الكحلي الغامق للعنوان الرئيسي */
+  --lms-hover: #3599C4;        /* درجة أغمق سنة للـ Hover */
+  --lms-bg-light: #F4F9FC;     /* خلفية مريحة مايلة للأزرق الفاتح جداً */
+  --lms-transition: all 0.3s ease;
+}
+
+/* تعديل الزرار ليكون مطابق للوجو */
+.btn-primary {
+  background-color: var(--lms-primary) !important;
+  border: none !important;
+  color: white !important;
+  padding: 12px 30px !important;
+  border-radius: 50px !important; 
+  font-weight: 600 !important;
+  transition: var(--lms-transition) !important;
+  box-shadow: 0 4px 15px rgba(65, 179, 227, 0.3) !important;
+}
+
+/* تأثير الـ Hover باللون الجديد */
+.btn-primary:hover {
+  background-color: var(--lms-hover) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(65, 179, 227, 0.4) !important;
+}
+
+/* تعديل لون النص اللي واخد كلاس text-lms-main */
+.text-lms-main {
+  color: var(--lms-primary) !important;
+}
+
+/* تنسيق زرار Learn More */
+/* تنسيق زرار Learn More الاحترافي */
+.btn-outline-primary {
+  color: var(--lms-dark) !important; /* خلي الكلام بالكحلي الغامق عشان يبقى واضح */
+  border: 2px solid var(--lms-primary) !important; /* البوردر بلون اللوجو اللبني وسميك سنة */
+  background-color: transparent !important;
+  padding: 12px 30px !important;
+  border-radius: 50px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* تأثير الـ Hover */
+.btn-outline-primary:hover {
+  background-color: var(--lms-primary) !important; /* يملى لبني لما تقف عليه */
+  color: white !important; /* الكلام يقلب أبيض */
+  border-color: var(--lms-primary) !important;
+  transform: translateY(-3px); /* نفس حركة الرفع بتاعة الزرار الأول */
+  box-shadow: 0 6px 15px rgba(65, 179, 227, 0.2) !important;
+}
+
+/* About Cards Style */
+.proctor-card {
+    background: #fff;
+    border-radius: 20px;
+    border: 1px solid rgba(0,0,0,0.05);
+    transition: 0.3s;
+}
+.proctor-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(65, 179, 227, 0.2);
+}
+
+/* Contact Glass Style */
+.contact-glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 30px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.text-primary { color: #41B3E3 !important; }
+.bg-dark { background-color: #001529 !important; }
+
+/* ══════════════════════════════════════════════════════════════
+   GLOBAL RESPONSIVE WEB DESIGN (RWD) UTILITIES
+   Breakpoints: 576px (SM) | 768px (MD) | 992px (LG) | 1200px (XL)
+   ══════════════════════════════════════════════════════════════ */
+
+/* ── Minimum Touch Target (44×44 px) for all interactive elements ── */
+.icon-btn,
+.btn-close-modal,
+.btn-create,
+.btn-retry,
+.btn-assessments,
+.btn-content,
+.btn-edit-action,
+.btn-status-action,
+.btn-to-disable,
+.btn-to-enable,
+.status-badge button {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+/* Ensure icon-only buttons with explicit width/height still meet 44px ──
+   We bump their size on touch screens only */
+@media (max-width: 767.98px) {
+  .icon-btn {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* ── Modals: near-fullscreen on mobile ── */
+  .modal-dialog {
+    margin: 0.5rem auto !important;
+  }
+  .modal-dialog.modal-lg,
+  .modal-dialog.modal-xl {
+    max-width: calc(100vw - 1rem) !important;
+    width: calc(100vw - 1rem) !important;
+  }
+  .modal-content .modal-body {
+    max-height: 70vh !important; /* more room to type on mobile */
+  }
+
+  /* ── Prevent horizontal scroll on body ── */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* ── Buttons full-width on xs when stacked ── */
+  .btn-lumina-main,
+  .btn-lumina-outline,
+  .btn-cancel-modal,
+  .btn-save-modal {
+    min-height: 44px;
+  }
+}

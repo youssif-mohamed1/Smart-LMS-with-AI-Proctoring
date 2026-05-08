@@ -1,0 +1,244 @@
+<!-- ============================================================
+     Course Content View — content-view.component.html
+     Stitch reference: stitch-designs/content-view/
+     ============================================================ -->
+
+<div class="container-fluid py-4 px-4" style="max-width: 1200px;">
+
+  <!-- ── Course Header Section ────────────────────────────────── -->
+  <section
+    class="course-header-section position-relative mb-5 rounded-4 overflow-hidden bg-white shadow-sm border border-secondary-subtle"
+    style="display: flex; flex-direction: column; justify-content: flex-end;">
+
+    <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 0;">
+      <img class="w-100 h-100 object-fit-cover" style="opacity: 0.9;"
+        [src]="courseDetails?.ImageUrl || 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=2000'"
+        alt="Course Image">
+      <!-- Gradient overlay -->
+      <div class="position-absolute top-0 start-0 w-100 h-100"
+        style="background: linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(255,255,255,0.6) 50%, transparent 100%);">
+      </div>
+    </div>
+
+    <div class="position-relative p-4 p-md-5" style="z-index: 10;">
+      <nav class="d-flex align-items-center gap-2 mb-3 small fw-semibold text-lms-primary">
+        <a class="text-decoration-none text-lms-primary header-back-link" href="javascript:void(0)"
+          (click)="goBack()">Back to Courses</a>
+        <i class="bi bi-chevron-right small text-dark opacity-50"></i>
+        <span class="text-dark opacity-75">Content</span>
+      </nav>
+
+      <h1 class="display-5 fw-bolder mb-3 text-dark"
+        style="font-family: 'Work Sans', sans-serif; letter-spacing: -0.02em;">
+        {{ courseDetails?.Title || 'Loading Course...' }}
+      </h1>
+
+      <p class="fs-5 text-secondary mb-2" style="max-width: 100%; line-height: 1.6;">
+        {{ courseDetails?.Description || '' }}
+      </p>
+      <div class="text-secondary mb-0" style="max-width: 100%; line-height: 1.6;">
+        Course Outcomes: {{ courseDetails?.LearningOutcomes || '' }}
+      </div>
+
+      <div class="d-flex flex-wrap gap-4 mt-4">
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-calendar-event text-lms-primary fs-5"></i>
+          <span class="text-dark small fw-medium">{{ courseDetails?.semster || 'Unknown Semester' }}</span>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-clock text-lms-primary fs-5"></i>
+          <span class="text-dark small fw-medium">{{ courseDetails?.Credit_Hour || '0' }} Credit Hours</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Tabs Navigation ───────────────────────────────────────────────── -->
+  <div class="tabs-nav-wrapper d-flex align-items-center justify-content-between mb-5 border-bottom border-secondary-subtle">
+    <div class="d-flex gap-4 overflow-x-auto flex-nowrap">
+
+      <!-- Content Tab (Active) -->
+      <button class="btn btn-link text-decoration-none pb-3 px-0 border-0 border-bottom border-2 text-lms-primary fw-bold d-flex align-items-center gap-2"
+              style="border-color: #41B3E3 !important; border-radius: 0;">
+        <i class="bi bi-layout-text-window-reverse fs-5"></i>
+        Content
+      </button>
+
+      <!-- Assignments Tab (Inactive) -->
+      <button class="btn btn-link text-decoration-none pb-3 px-0 border-0 text-secondary fw-medium d-flex align-items-center gap-2"
+              style="border-radius: 0;">
+        <i class="bi bi-clipboard-check fs-5"></i>
+        Assignments
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Section Title & Add Button ───────────────────────────────── -->
+  <div class="d-flex align-items-center justify-content-between mb-4 ps-1 flex-wrap gap-2">
+    <h3 class="section-title mb-0">Published Contents</h3>
+    <!-- Add New Content CTA -->
+    <button *ngIf="canAdd" id="btn-add-content" class="btn btn-lumina-main d-flex align-items-center gap-2"
+      (click)="onAddContent()">
+      <i class="bi bi-plus-lg"></i>
+      Add New Content
+    </button>
+  </div>
+
+  <!-- ── Loading Spinner ────────────────────────────────────── -->
+  <div *ngIf="isLoading" class="text-center my-5 py-5" id="content-loading-spinner">
+    <div class="spinner-border text-lms-primary" role="status" style="width:3rem;height:3rem;">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <p class="text-muted mt-3">Loading course content…</p>
+  </div>
+
+  <!-- ── Load Error Banner ───────────────────────────────────── -->
+  <div *ngIf="!isLoading && loadError" class="alert alert-danger d-flex align-items-center gap-2"
+    id="content-load-error" role="alert">
+    <i class="bi bi-exclamation-triangle-fill fs-5"></i>
+    <div>
+      {{ loadError }}
+      <button class="btn btn-link btn-sm p-0 ms-2" (click)="loadContent()">Retry</button>
+    </div>
+  </div>
+
+  <!-- ── Empty State ────────────────────────────────────────── -->
+  <div *ngIf="!isLoading && !loadError && contentList.length === 0" class="empty-state-card text-center py-5"
+    id="content-empty-state">
+    <i class="bi bi-inbox empty-state-icon"></i>
+    <h5 class="mt-3 text-muted">No Content Yet</h5>
+    <p class="text-muted small">This course has no published content items.</p>
+  </div>
+
+  <!-- ── Content Card List ──────────────────────────────────── -->
+  <div *ngIf="!isLoading && !loadError && contentList.length > 0" class="content-list" id="content-list">
+
+    <div *ngFor="let item of contentList; let i = index" class="content-card mb-4" [id]="'content-card-' + item.id">
+
+      <!-- Card Header Row -->
+      <div class="card-header-row d-flex align-items-center justify-content-between p-4"
+        [class.is-editing]="editingIds.has(item.id)" (click)="!editingIds.has(item.id) && toggleExpand(item.id)"
+        [style.cursor]="editingIds.has(item.id) ? 'default' : 'pointer'">
+
+        <!-- Left: Number + Title/Body -->
+        <div class="d-flex align-items-center gap-4">
+          <div class="content-number-badge" [class.active]="isExpanded(item.id)">
+            <span class="fw-bold">{{ (i + 1) | number: '2.0-0' }}</span>
+          </div>
+          <div>
+            <h5 class="content-title mb-0" [id]="'content-title-' + item.id">{{ item.title }}</h5>
+            <p class="content-body text-muted small mt-1 mb-0" [id]="'content-body-' + item.id">{{ item.body }}</p>
+            <!-- Attachment count summary -->
+            <p class="content-attachment-count text-muted mb-0 mt-1" *ngIf="!editingIds.has(item.id)">
+              <span *ngIf="item.contentAttachments.length > 0">
+                <i class="bi bi-paperclip me-1"></i>{{ item.contentAttachments.length }} file(s)
+              </span>
+              <span *ngIf="item.contentAttachments.length === 0" class="text-muted fst-italic small">
+                No attachments
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Right: Action buttons + expand icon -->
+        <div class="d-flex align-items-center gap-2" (click)="$event.stopPropagation()">
+
+          <!-- Edit button (canUpdate, not in edit mode) -->
+          <button *ngIf="canUpdate && !editingIds.has(item.id)"
+            class="btn btn-edit-action d-flex align-items-center gap-1" [id]="'btn-edit-' + item.id"
+            [attr.aria-label]="'Edit content ' + item.title" (click)="startEdit(item)">
+            <i class="bi bi-pencil-square"></i>
+            Edit
+          </button>
+
+          <!-- Delete button (canDelete, not in edit mode) -->
+          <button *ngIf="canDelete && !editingIds.has(item.id)" class="btn btn-link btn-delete-card text-danger p-2"
+            [id]="'btn-delete-' + item.id" [attr.aria-label]="'Delete content ' + item.title"
+            (click)="deleteContent(item.id)">
+            <i class="bi bi-trash3 fs-5"></i>
+          </button>
+
+          <!-- Expand toggle (not in edit mode) -->
+          <i *ngIf="!editingIds.has(item.id)" class="bi expand-icon"
+            [ngClass]="isExpanded(item.id) ? 'bi-chevron-up' : 'bi-chevron-down'"
+            (click)="toggleExpand(item.id)" style="cursor: pointer;">
+          </i>
+        </div>
+      </div>
+
+      <!-- ── Inline Edit Form ──────────────────────────────── -->
+      <div *ngIf="editingIds.has(item.id)" class="inline-edit-form border-top p-4">
+        <div class="mb-3">
+          <label [for]="'edit-title-' + item.id" class="form-label fw-bold">Title</label>
+          <input type="text" class="form-control" [id]="'edit-title-' + item.id"
+            [(ngModel)]="editFormData.get(item.id)!.title" placeholder="Content title">
+        </div>
+        <div class="mb-4">
+          <label [for]="'edit-body-' + item.id" class="form-label fw-bold">DESCRIPTION</label>
+          <textarea class="form-control" [id]="'edit-body-' + item.id" rows="4"
+            [(ngModel)]="editFormData.get(item.id)!.body" placeholder="Content description"></textarea>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-save-action" [id]="'btn-save-' + item.id" (click)="saveEdit(item.id)">
+            <i class="bi bi-check-lg me-1"></i>Save Changes
+          </button>
+          <button class="btn btn-lumina-outline btn-sm" [id]="'btn-cancel-' + item.id" (click)="cancelEdit(item.id)">
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Attachment List (expanded) ───────────────────── -->
+      <div *ngIf="isExpanded(item.id) && !editingIds.has(item.id)" class="attachment-list border-top"
+        [id]="'attachment-list-' + item.id">
+
+        <!-- Empty attachments message -->
+        <div *ngIf="item.contentAttachments.length === 0"
+          class="attachment-empty py-3 px-5 text-muted small fst-italic">
+          No attachments for this content item.
+        </div>
+
+        <!-- Attachment rows -->
+        <div *ngFor="let att of item.contentAttachments"
+          class="attachment-row d-flex align-items-center justify-content-between px-3 px-md-5 py-2"
+          [id]="'attachment-' + att.id">
+
+
+          <!-- Icon + filename -->
+          <div class="d-flex align-items-center gap-3 attachment-link" (click)="openAttachment(att.fileUrl)"
+            role="button" [attr.aria-label]="'Open attachment ' + att.fileName">
+            <i [class]="getAttachmentIcon(att.contentType) + ' fs-5 text-lms-primary'"></i>
+            <span class="attachment-name small fw-medium">{{ att.fileName }}</span>
+          </div>
+
+          <!-- Delete attachment button (canDelete) -->
+          <button *ngIf="canDelete" class="btn btn-link btn-sm text-danger btn-delete-attachment"
+            [id]="'btn-delete-att-' + att.id" [attr.aria-label]="'Remove attachment ' + att.fileName"
+            (click)="deleteAttachment(item.id, att.id)">
+            <i class="bi bi-trash3"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <!-- end *ngFor content card -->
+
+  </div>
+  <!-- end content-list -->
+
+  <!-- ── Add Content Modal Host ──────────────────────────────── -->
+  <div class="modal fade" id="contentAddModal" tabindex="-1"
+       data-bs-backdrop="static" data-bs-keyboard="false"
+       aria-labelledby="contentAddModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content rounded-3 overflow-hidden shadow-lg">
+        <app-content-add
+          [courseId]="courseId"
+          (contentCreated)="onContentCreated($event)"
+          (modalDismissed)="closeContentModal()">
+        </app-content-add>
+      </div>
+    </div>
+  </div>
+
+</div>

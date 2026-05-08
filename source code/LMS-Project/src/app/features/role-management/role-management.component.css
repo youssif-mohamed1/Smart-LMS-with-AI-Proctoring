@@ -1,0 +1,274 @@
+.status-toggle-btn {
+  min-width: 85px; /* نفس المقاس اللي ظبط معاك في الـ Users */
+  text-align: center;
+  justify-content: center;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* الحاوية اللي بتحدد الارتفاع */
+.table-container {
+  max-height: 565px; /* الارتفاع ده هيعرض حوالي 8 مستخدمين مرتاحين */
+  overflow-y: auto; /* يظهر سكرول لما البيانات تزيد */
+  position: relative;
+}
+
+/* تثبيت رأس الجدول عشان ما يختفيش وأنت بتعمل سكرول */
+.sticky-top {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background-color: white !important;
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1); /* ظل خفيف عشان يبان إنه فوق */
+}
+
+/* لمسة جمالية للسكرول بار عشان يبقى شبه "لومينا" */
+.table-container::-webkit-scrollbar {
+  width: 6px;
+}
+.table-container::-webkit-scrollbar-thumb {
+  background: #41b3e3;
+  border-radius: 10px;
+}
+
+/* الألوان الأساسية لـ لومينا */
+:root {
+  --lumina-blue: #002d5b; /* الأزرق الغامق بتاع اللوجو */
+  --lumina-info: #41b3e3; /* السماوي الأساسي */
+}
+
+/* 1. تنسيق الـ Badges (Active / Disabled) - خليهم Solid عشان يبانوا */
+.badge.bg-success {
+  background-color: var(--lumina-info) !important;
+  color: white !important;
+  border: none;
+  padding: 6px 12px;
+}
+
+.badge.bg-danger {
+  background-color: #ff4b2b !important;
+  color: white !important;
+  border: none;
+  padding: 6px 12px;
+}
+
+/* 2. تنسيق الـ Enrollable badge */
+.badge.bg-info {
+  background-color: rgba(65, 179, 227, 0.2) !important;
+  color: var(--lumina-info) !important;
+  border: 1px solid var(--lumina-info);
+}
+
+/* 3. تنسيق زراير الـ Actions - نرجع لها هيبتها */
+/* تنسيق موحد للزراير عشان تكون Slim وشكلها شيك */
+.btn-status-action {
+    padding: 4px 12px !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    border-radius: 6px !important;
+    transition: all 0.3s ease !important;
+    min-width: 85px;
+    border: 1px solid transparent !important;
+    background-color: transparent !important;
+}
+
+/* زرار الـ Disable: أحمر هادي جداً (Muted Red) */
+.btn-to-disable {
+    color: #e63946 !important; /* درجة أحمر هادية */
+    border-color: rgba(230, 57, 70, 0.2) !important;
+    background-color: rgba(230, 57, 70, 0.03) !important;
+}
+
+.btn-to-disable:hover {
+    background-color: #e63946 !important;
+    color: white !important;
+    box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
+}
+
+/* زرار الـ Enable: أزرق سماوي أو أخضر نعناعي هادي */
+.btn-to-enable {
+    color: #2a9d8f !important; /* درجة أخضر/سماوي هادية */
+    border-color: rgba(42, 157, 143, 0.2) !important;
+    background-color: rgba(42, 157, 143, 0.03) !important;
+}
+
+.btn-to-enable:hover {
+    background-color: #2a9d8f !important;
+    color: white !important;
+    box-shadow: 0 4px 8px rgba(42, 157, 143, 0.2);
+}
+
+/* زرار التعديل (Edit) - العودة للشكل الاحترافي */
+.btn-edit-action {
+    color: #41B3E3 !important;
+    background-color: rgba(65, 179, 227, 0.08) !important; /* خلفية خفيفة جداً */
+    border: 1px solid #41B3E3 !important;
+    border-radius: 6px !important;
+    padding: 5px 15px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-edit-action:hover {
+  background-color: #41b3e3 !important;
+    color: white !important;
+    box-shadow: 0 4px 10px rgba(65, 179, 227, 0.3);
+}
+
+/* تعديل أيقونة القلم داخل الزرار */
+.btn-edit-action i {
+    margin-right: 4px;
+    font-size: 0.9rem;
+}
+
+
+
+
+
+
+/* ستايل الـ Status الجديد (Inspired by Enrollable) */
+.status-badge {
+    padding: 5px 12px !important;
+    font-size: 0.82rem !important;
+    font-weight: 600 !important;
+    border-radius: 6px !important;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: capitalize;
+}
+
+/* حالة الـ Active: سماوي هادي (Lumina Info) */
+.status-active {
+    background-color: rgba(65, 179, 227, 0.12) !important;
+    color: #3189ad !important; /* درجة أغمق شوية من السماوي عشان الوضوح */
+}
+
+/* حالة الـ Disabled: رمادي/أحمر هادي جداً */
+.status-disabled {
+    background-color: rgba(108, 117, 125, 0.1) !important;
+    color: #6c757d !important;
+}
+
+/* أيقونة الحالة */
+.status-badge i {
+    font-size: 0.9rem;
+}
+
+
+
+
+
+
+
+/* زرار الإضافة الرئيسي (Create New Role / User) */
+.btn-lumina-main {
+    background: linear-gradient(135deg, #41B3E3, #002d5b) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 12px rgba(65, 179, 227, 0.2) !important;
+}
+
+.btn-lumina-main:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(65, 179, 227, 0.3) !important;
+    filter: brightness(1.1);
+}
+
+/* زرار الغلق (Close Form) - خليه هادي عشان ما يزحمش العين */
+.btn-lumina-outline {
+    background: transparent !important;
+    color: #002d5b !important;
+    border: 1.5px solid #002d5b !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-lumina-outline:hover {
+    background: #002d5b !important;
+    color: white !important;
+}
+
+/* زرار الحفظ (Save / Create) داخل الفورم */
+.btn-save-action {
+    background-color: #41B3E3 !important;
+    color: white !important;
+    border: none !important;
+    border-radius: 6px !important;
+    padding: 8px 25px !important;
+    font-weight: 600 !important;
+}
+
+.btn-save-action:disabled {
+    background-color: #ccc !important;
+    cursor: not-allowed;
+}
+
+
+/* تنسيق رأس الكارد عشان يطقم مع السايد بار */
+.card-header {
+    /* نفس ألوان السايد بار الكحلي الغامق */
+    background: linear-gradient(90deg, #001a33 0%, #002d5b 100%) !important;
+    /* color: #41B3E3 !important; النص باللون السماوي بتاع لومينا */
+    border-bottom: 1px solid rgba(65, 179, 227, 0.3) !important;
+    padding: 15px 20px !important;
+}
+
+/* لو فيه أي أيقونة جوه الهيدر تاخد نفس اللون */
+.card-header h5 {
+    /* font-weight: 550 !important; */
+    letter-spacing: 0.5px;
+    margin-bottom: 0;
+}
+
+/* تحسين شكل الكارد نفسه */
+.card {
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05) !important;
+}
+
+.form-control:focus {
+    border-color: #41B3E3 !important;
+    box-shadow: 0 0 0 0.25rem rgba(65, 179, 227, 0.2) !important;
+}
+
+
+
+
+/* تنسيق رأس الجدول (Table Header) */
+.table thead th {
+    background-color: #001a33 !important; /* كحلي غامق يطقم مع السايد بار */
+    color: #41B3E3 !important;           /* نص سماوي لومينا */
+    font-weight: 600 !important;
+    text-transform: uppercase;           /* الحروف كبيرة بيدي شكل رسمي أكتر */
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+    padding: 15px 10px ;
+    border-bottom: 2px solid #41B3E3 !important; /* خط سماوي بيفصل العناوين عن البيانات */
+    vertical-align: middle;
+}
+
+/* تحسين شكل الصفوف تحت الهيدر */
+.table tbody tr {
+    transition: all 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(65, 179, 227, 0.05) !important; /* تأثير خفيف عند الوقوف على الصف */
+}
+
+/* تنسيق الخلايا لجعل النص في المنتصف عمودياً */
+.table tbody td {
+    padding: 12px 10px ;
+    color: #333;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #eee !important;
+}

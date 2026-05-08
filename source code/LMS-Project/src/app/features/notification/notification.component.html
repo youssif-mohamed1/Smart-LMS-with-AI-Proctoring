@@ -1,0 +1,49 @@
+<div class="notification-bell-wrapper">
+  <button class="notification-bell-btn" (click)="toggleDropdown($event)">
+    <i class="bi bi-bell-fill" style="font-size: 1.25rem;"></i>
+    <span class="notification-badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+  </button>
+
+  <div class="notification-dropdown" *ngIf="isDropdownOpen" (click)="$event.stopPropagation()">
+    <div class="notification-header">
+      <h3 class="notification-title">Notifications</h3>
+      <button class="mark-all-read" (click)="markAllAsRead($event)" *ngIf="notifications.length > 0">Mark all as read</button>
+    </div>
+
+    <div class="notification-list custom-scrollbar">
+      <div class="notification-empty" *ngIf="notifications.length === 0">
+        <i class="bi bi-bell-slash empty-icon"></i>
+        <p class="empty-text">No notifications right now.</p>
+      </div>
+
+      <div class="notification-item" 
+           *ngFor="let notif of notifications"
+           [class.unread]="!notif.isRead"
+           [class.read]="notif.isRead"
+           (click)="toggleExpand(notif, $event)">
+        
+        <div class="notification-dot-wrapper" *ngIf="!notif.isRead">
+          <span class="notification-dot"></span>
+        </div>
+        <div class="notification-dot-wrapper" *ngIf="notif.isRead" style="visibility: hidden;">
+          <span class="notification-dot"></span>
+        </div>
+
+        <div class="notification-content">
+          <div class="notification-item-header">
+            <p class="notification-item-title">{{ notif.title }}</p>
+            <div class="d-flex align-items-center">
+              <span class="notification-time">{{ getRelativeTime(notif.createdAt) }}</span>
+              <button class="delete-btn" (click)="deleteNotification(notif.id, $event)" title="Delete">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </div>
+          </div>
+          <p class="notification-message" [class.collapsed]="!expandedItems.has(notif.id)">
+            {{ notif.message }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

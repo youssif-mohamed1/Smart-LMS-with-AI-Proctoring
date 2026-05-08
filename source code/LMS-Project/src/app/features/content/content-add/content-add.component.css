@@ -1,0 +1,262 @@
+/* ============================================================
+   content-add.component.css
+   Stitch reference: stitch-designs/content-add/screen.png
+   ============================================================ */
+
+/* ── Modal Header ──────────────────────────────────────────── */
+.content-add-header {
+  background: linear-gradient(90deg, #001A33 0%, #002D5B 100%);
+  color: #41B3E3;
+  border-bottom: 1px solid rgba(65, 179, 227, 0.3);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content-add-header .modal-title {
+  color: #41B3E3;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.btn-close-modal {
+  background: transparent;
+  border: none;
+  color: #41B3E3;
+  font-size: 1.1rem;
+  padding: 6px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+}
+
+.btn-close-modal:hover {
+  background: rgba(65, 179, 227, 0.1);
+}
+
+/* ── Modal Body ────────────────────────────────────────────── */
+.modal-body {
+  overflow-y: auto;
+  max-height: 65vh; /* Prevents the modal from expanding infinitely, triggering internal scroll */
+}
+
+/* ── Field Labels ──────────────────────────────────────────── */
+.field-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3e484e;
+  margin-bottom: 0.5rem;
+}
+
+/* ── Form Controls ─────────────────────────────────────────── */
+.form-control:focus,
+.form-select:focus {
+  border-color: #41B3E3;
+  box-shadow: 0 0 0 0.2rem rgba(65, 179, 227, 0.2);
+}
+
+/* ── Upload Zone ───────────────────────────────────────────── */
+.upload-zone {
+  border: 2px dashed #bdc8cf;
+  border-radius: 12px;
+  padding: 1.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  background-color: #f6fafe;
+  user-select: none;
+}
+
+.upload-zone:hover,
+.upload-zone:focus {
+  border-color: #41B3E3;
+  background-color: rgba(65, 179, 227, 0.04);
+  outline: none;
+}
+
+.upload-zone-disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.upload-zone-icon {
+  font-size: 2.2rem;
+  color: #41B3E3;
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.upload-zone-text {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #171c1f;
+  margin-bottom: 0.25rem;
+}
+
+.upload-zone-hint {
+  font-size: 0.8rem;
+  color: #6C757D;
+}
+
+/* ── File List ─────────────────────────────────────────────── */
+.file-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.file-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid #e4e9ed;
+  border-radius: 8px;
+  background: #ffffff;
+  transition: background 0.15s ease;
+}
+
+.file-row:hover {
+  background: rgba(65, 179, 227, 0.04);
+}
+
+.file-icon-pdf {
+  color: #dc3545;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.file-icon-video {
+  color: #41B3E3;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.file-name {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #001A33;
+  min-width: 0;
+}
+
+.file-size {
+  font-size: 0.8rem;
+  color: #6C757D;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.file-remove-btn {
+  color: #6C757D;
+  line-height: 1;
+  transition: color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.file-remove-btn:hover {
+  color: #dc3545;
+}
+
+/* ── Progress Bar ──────────────────────────────────────────── */
+.upload-progress {
+  height: 4px;
+  border-radius: 9999px;
+  background: rgba(65, 179, 227, 0.15);
+}
+
+.upload-progress .progress-bar {
+  background-color: #41B3E3 !important;
+}
+
+.bg-lms-primary {
+  background-color: #41B3E3 !important;
+}
+
+/* ── Modal Footer ──────────────────────────────────────────── */
+.modal-footer {
+  background: #f6fafe;
+  justify-content: flex-end;
+}
+
+.btn-cancel-modal {
+  padding: 0.55rem 1.4rem;
+  border: 2px solid #002D5B;
+  background: transparent;
+  color: #002D5B;
+  border-radius: 8px;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+.btn-cancel-modal:hover:not(:disabled) { background: #002D5B; color: #fff; }
+.btn-cancel-modal:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-save-modal {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 1.75rem;
+  background: linear-gradient(135deg, #41B3E3, #002D5B);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Work Sans', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(65, 179, 227, 0.3);
+  transition: box-shadow 0.2s, transform 0.15s;
+}
+.btn-save-modal:hover:not(:disabled) {
+  box-shadow: 0 6px 16px rgba(65, 179, 227, 0.45);
+  transform: translateY(-1px);
+}
+.btn-save-modal:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+/* ══════════════════════════════════════════════════════════════
+   RESPONSIVE WEB DESIGN — Content Add Modal
+   ══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 767.98px) {
+  /* Modal body: allow more scroll room when keyboard is open */
+  .modal-body {
+    max-height: 60vh;
+    padding: 1rem !important;
+  }
+  /* Footer: stack buttons on xs */
+  .modal-footer {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+  }
+  .btn-cancel-modal,
+  .btn-save-modal {
+    width: 100%;
+    justify-content: center;
+  }
+  /* File rows: tighten padding */
+  .file-row {
+    padding: 0.5rem 0.75rem;
+  }
+  /* Upload zone: reduce padding */
+  .upload-zone {
+    padding: 1rem 0.75rem;
+  }
+  /* Header: tighter */
+  .content-add-header {
+    padding: 0.75rem 1rem;
+  }
+}
+

@@ -1,0 +1,110 @@
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-info fw-bold mb-0">Role Management</h2>
+        <button *ngIf="hasPermission('roles:add')" class="btn shadow-sm"
+            [ngClass]="showCreateForm ? 'btn-lumina-outline' : 'btn-lumina-main'"
+            (click)="showCreateForm = !showCreateForm; (showCreateForm ? null : resetForm())">
+            <i class="bi" [ngClass]="showCreateForm ? 'bi-x-lg' : 'bi-plus-lg'"></i>
+            {{ showCreateForm ? 'Close Form' :'Create New Role' }}
+        </button>
+    </div>
+
+    <div class="card shadow-sm mb-4 " *ngIf="showCreateForm">
+        <div class="card-header py-3 text-info">
+            <h5 class="mb-0 ">{{ editingRoleId ? 'Edit Role: ' + newRoleName : 'Add New Role' }}</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-bold">Role Name</label>
+                    <input type="text" class="form-control" [(ngModel)]="newRoleName"
+                        placeholder="e.g., Instructor">
+                </div>
+                <div class="col-md-6 mb-3 d-flex align-items-end">
+                    <div class="form-check form-switch mb-2">
+                        <input class="form-check-input" type="checkbox" [(ngModel)]="isEnrollable" id="enrollSwitch">
+                        <label class="form-check-label ms-2" for="enrollSwitch">Enrollable</label>
+                    </div>
+                </div>
+            </div>
+
+            <h6 class="border-bottom pb-2 mb-3 mt-3 text-muted">Assign Permissions ({{selectedPermissions.length}}
+                selected)</h6>
+            <div class="row">
+                <div class="col-md-3 col-sm-6 mb-2" *ngFor="let perm of allPermissions">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" [id]="perm"
+                            [checked]="selectedPermissions.includes(perm)" (change)="onPermissionChange(perm, $event)">
+                        <label class="form-check-label small" [for]="perm">{{ perm }}</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-end mt-4 border-top pt-3">
+                <button class="btn btn-link text-secondary me-2" (click)="resetForm()">Cancel</button>
+                <button class="btn btn-save-action px-4" (click)="saveRole()" [disabled]="!newRoleName">
+                    {{ editingRoleId ? 'Update Role' : 'Save Role' }}
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isLoading" class="text-center my-5">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-2 text-muted">Fetching roles from server...</p>
+    </div>
+
+    <div class="card shadow-sm mb-4" *ngIf="!isLoading">
+        <div class="table-container shadow-sm rounded">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light sticky-top">
+                    <tr>
+                        <th style="width: 25%;">Role Name</th>
+                        <th class="text-center" style="width: 30%;">Enrollable</th>
+                        <th class="text-center" style="width: 30%;">Status</th>
+                        <th *ngIf="hasPermission('roles:update') || hasPermission('roles:delete')" class="text-center"
+                            style="width: 15%;">
+                            Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let role of roles">
+                        <td class="fw-bold">{{ role.name }}</td>
+                        <td class="text-center">
+                            <span class="badge rounded-pill"
+                                [ngClass]="role.isEnrollable ? 'bg-info text-dark' : 'bg-light text-muted'">
+                                {{ role.isEnrollable ? 'Yes' : 'No' }}
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            <span class="status-badge"
+                                [ngClass]="role.isDeleted ? 'status-disabled' : 'status-active' ">
+                                {{ role.isDeleted ? 'Disabled' : 'Active' }}
+                            </span>
+                        </td>
+                        <td *ngIf="hasPermission('roles:update') || hasPermission('roles:delete')" class="text-center">
+                            <div class="d-flex justify-content-center gap-2">
+                                <button *ngIf="hasPermission('roles:update')" class="btn-edit-action"
+                                    (click)="editRole(role)">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </button>
+                                <button *ngIf="hasPermission('roles:delete')" class="btn-status-action"
+                                    [ngClass]="role.isDeleted ? 'btn-to-enable' : 'btn-to-disable'"
+                                    (click)="toggleStatus(role.id)">
+                                    {{ role.isDeleted ? 'Enable' : 'Disable' }}
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="roles.length === 0">
+                        <td colspan="4" class="text-center py-4 text-muted">
+                            No roles found.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
